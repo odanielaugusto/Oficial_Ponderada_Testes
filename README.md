@@ -63,6 +63,13 @@ describe('Testando a página Home', () => {
 });
 
 ```
+<div align="center">
+  <sub>Figura 1 - Automatização de Testes</sub> <br>
+
+  <img src="./2025-1A-T13-ES05-G01-develop//docs/assets/testes_home.png" alt="Teste da Home">
+
+  <sup>Fonte: Material produzido pelos autores (2025).</sup>
+</div>
 
 ### Como Rodar os Testes?
 
