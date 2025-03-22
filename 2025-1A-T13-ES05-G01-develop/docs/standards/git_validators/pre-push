@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Pega o nome da branch atual
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+# Define o padrão da branch (semelhante ao Gitflow)
+PATTERN="^(feature|bugfix|release|hotfix|docs|dev)/.*$"
+
+# Valida o nome da branch
+if ! echo "$BRANCH_NAME" | grep -qE "$PATTERN"; then
+  echo "⛔ Nome de branch inválido: $BRANCH_NAME. O nome da branch deve seguir o padrão: [tipo]/[finalidade]/[nome-da-branch], onde [tipo] é 'feature', 'bugfix', 'release', 'hotfix', 'docs' ou 'dev'."
+  exit 1
+fi
+
+echo "✅ Nome da branch está válido. Você pode abrir o PR."
