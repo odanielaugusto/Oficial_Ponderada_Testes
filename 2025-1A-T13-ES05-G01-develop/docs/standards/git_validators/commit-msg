@@ -1,0 +1,28 @@
+#!/bin/sh
+
+commit_msg=$(head -n 1 "$1") # Pega apenas a primeira linha do commit (o título)
+
+# Se for um commit de merge, permitir sem validações
+if echo "$commit_msg" | grep -qE "^Merge "; then
+  echo "✅ Commit de merge detectado. Aceito sem validações."
+  exit 0
+fi
+
+# Validação do formato semântico (feat, fix, chore, etc.)
+if ! echo "$commit_msg" | grep -qE "^(feat|fix|chore|docs|style|refactor|test|perf): "; then
+  echo "⛔ Commit não aceito. A mensagem deve seguir o padrão semântico: feat|fix|chore|docs|style|refactor|test|perf: descrição"
+  exit 1
+fi
+
+# Extrai a parte da mensagem sem a tag inicial (removendo "feat: ", "fix: " etc.)
+commit_msg_without_tag=$(echo "$commit_msg" | sed -E 's/^(feat|fix|chore|docs|style|refactor|test|perf): //')
+
+# Validação do tamanho da mensagem (máximo de 50 caracteres)
+msg_length=${#commit_msg_without_tag}
+
+if [ "$msg_length" -gt 50 ]; then
+  echo "⛔ Commit não aceito. O título do commit deve ter no máximo 50 caracteres (atualmente tem $msg_length)."
+  exit 1
+fi
+
+echo "✅ Commit aceito."

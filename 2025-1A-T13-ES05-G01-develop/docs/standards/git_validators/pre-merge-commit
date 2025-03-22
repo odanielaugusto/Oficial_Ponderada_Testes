@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Obtém o nome da branch atual
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+# Define as branches protegidas
+PROTECTED_BRANCHES="main develop"
+
+if echo "$PROTECTED_BRANCHES" | grep -w "$BRANCH_NAME" > /dev/null; then
+  echo "⛔ Merge direto na branch '$BRANCH_NAME' não é permitido. Utilize Pull Requests."
+  exit 1
+fi

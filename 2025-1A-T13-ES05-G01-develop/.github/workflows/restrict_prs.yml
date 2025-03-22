@@ -1,0 +1,22 @@
+name: Restrict PRs to Main
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  restrict-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verificar origem do PR
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          HEAD_BRANCH="${{ github.head_ref }}"
+          if [[ "$BASE_BRANCH" == "main" && ! "$HEAD_BRANCH" =~ ^(develop|hotfix/.*)$ ]]; then
+            echo "🚨 Pull Requests para 'main' só são permitidos a partir de 'develop' ou 'hotfix/*'. Fechando PR automaticamente."
+            gh auth login --with-token <<< "${{ secrets.PAT_TOKEN }}"
+            gh pr close "$PR_URL" -r "🚨 PRs para 'main' só podem vir de 'develop' ou branches 'hotfix/*'."
+          fi
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
